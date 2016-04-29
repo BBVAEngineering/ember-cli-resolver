@@ -3,7 +3,7 @@ import {
 	module,
 	test
 } from 'qunit';
-import ResolverMixin from 'ember-cli-resolver/mixins/resolver';
+import ResolverMixin from 'ember-cli-awesome-resolver/mixins/resolver';
 import cases from '../helpers/cases';
 import amd from '../helpers/amd';
 import profile from '../helpers/profile';

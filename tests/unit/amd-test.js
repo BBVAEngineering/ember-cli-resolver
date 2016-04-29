@@ -25,8 +25,8 @@ test('it requires a module with its value and undefines it', function(assert) {
 });
 
 test('it does not undefine a module registered from outside', function(assert) {
-	assert.ok(amd.require('ember-cli-resolver/mixins/resolver'));
-	assert.ok(requirejs.entries['ember-cli-resolver/mixins/resolver']);
+	assert.ok(amd.require('ember-cli-awesome-resolver/mixins/resolver'));
+	assert.ok(requirejs.entries['ember-cli-awesome-resolver/mixins/resolver']);
 });
 
 test('it reset all registered modules', function(assert) {

@@ -2,7 +2,7 @@
 'use strict';
 
 module.exports = {
-	name: 'ember-cli-resolver',
+	name: 'ember-cli-awesome-resolver',
 
 	included: function(app) {
 		this._super.included(app);

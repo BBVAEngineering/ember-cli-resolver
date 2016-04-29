@@ -1,6 +1,6 @@
 import Ember from 'ember';
 import { module, test } from 'qunit';
-import merge from 'ember-cli-resolver/utils/merge';
+import merge from 'ember-cli-awesome-resolver/utils/merge';
 import cases from '../helpers/cases';
 
 const object = {};

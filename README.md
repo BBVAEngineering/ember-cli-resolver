@@ -1,14 +1,14 @@
-# ember-cli-resolver [![Build Status](https://travis-ci.org/BBVAEngineering/ember-cli-resolver.svg?branch=master)](https://travis-ci.org/BBVAEngineering/ember-cli-resolver) [![GitHub version](https://badge.fury.io/gh/BBVAEngineering%2Fember-cli-resolver.svg)](https://badge.fury.io/gh/BBVAEngineering%2Fember-cli-resolver) [![Dependency Status](https://david-dm.org/BBVAEngineering/ember-cli-resolver.svg)](https://david-dm.org/BBVAEngineering/ember-cli-resolver)
+# ember-cli-awesome-resolver [![Build Status](https://travis-ci.org/BBVAEngineering/ember-cli-awesome-resolver.svg?branch=master)](https://travis-ci.org/BBVAEngineering/ember-cli-awesome-resolver) [![GitHub version](https://badge.fury.io/gh/BBVAEngineering%2Fember-cli-awesome-resolver.svg)](https://badge.fury.io/gh/BBVAEngineering%2Fember-cli-awesome-resolver) [![Dependency Status](https://david-dm.org/BBVAEngineering/ember-cli-awesome-resolver.svg)](https://david-dm.org/BBVAEngineering/ember-cli-awesome-resolver)
 
 This resolver allows to use any amd module namespace defined in the configuration file.
 
 ## Information
 
-[![NPM](https://nodei.co/npm/ember-cli-resolver.png?downloads=true&downloadRank=true)](https://nodei.co/npm/ember-cli-resolver/)
+[![NPM](https://nodei.co/npm/ember-cli-awesome-resolver.png?downloads=true&downloadRank=true)](https://nodei.co/npm/ember-cli-awesome-resolver/)
 
 <table>
 <tr>
-<td>Package</td><td>ember-cli-resolver</td>
+<td>Package</td><td>ember-cli-awesome-resolver</td>
 </tr>
 <tr>
 <td>Description</td>
@@ -22,7 +22,7 @@ This resolver allows to use any amd module namespace defined in the configuratio
 
 ## Installation
 
-* `ember install ember-cli-resolver`
+* `ember install ember-cli-awesome-resolver`
 
 ## Dependencies
 

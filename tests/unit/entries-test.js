@@ -1,6 +1,6 @@
 import Ember from 'ember';
 import { module, test } from 'qunit';
-import entries from 'ember-cli-resolver/utils/entries';
+import entries from 'ember-cli-awesome-resolver/utils/entries';
 
 module('Util: entries');
 

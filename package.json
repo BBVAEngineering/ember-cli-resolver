@@ -1,5 +1,5 @@
 {
-  "name": "ember-cli-resolver",
+  "name": "ember-cli-awesome-resolver",
   "version": "1.0.1",
   "description": "Awesome resolver for ember-cli projects",
   "directories": {
@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:BBVAEngineering/ember-cli-resolver.git"
+    "url": "git@github.com:BBVAEngineering/ember-cli-awesome-resolver.git"
   },
   "engines": {
     "node": ">= 0.10.0"
@@ -31,9 +31,9 @@
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/BBVAEngineering/ember-cli-resolver/issues"
+    "url": "https://github.com/BBVAEngineering/ember-cli-awesome-resolver/issues"
   },
-  "homepage": "https://github.com/BBVAEngineering/ember-cli-resolver",
+  "homepage": "https://github.com/BBVAEngineering/ember-cli-awesome-resolver",
   "devDependencies": {
     "broccoli-asset-rev": "^2.2.0",
     "ember-cli": "2.4.3",

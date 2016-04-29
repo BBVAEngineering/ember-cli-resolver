@@ -1,5 +1,5 @@
 {
-  "name": "ember-cli-resolver",
+  "name": "ember-cli-awesome-resolver",
   "dependencies": {
     "babel-polyfill": "~0.0.1",
     "ember": "2.5.1",

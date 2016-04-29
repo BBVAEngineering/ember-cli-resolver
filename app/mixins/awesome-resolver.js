@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import ResolverMixin from 'ember-cli-resolver/mixins/resolver';
+import ResolverMixin from 'ember-cli-awesome-resolver/mixins/resolver';
 
 /**
  * Implements `ResolverMixin`.
