@@ -13,13 +13,8 @@ module.exports = function(environment) {
         // e.g. 'with-controller': true
       }
     },
-    
-    customAddons: {
-        exclude: {
-            files: ['test/*'],
-            addons: ['test']
-        }
-    },
+
+    namespaces: ['test'],
 
     APP: {
       // Here you can pass flags/options to your application instance

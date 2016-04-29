@@ -35,10 +35,11 @@ This resolver allows to use any amd module namespace defined in the configuratio
 
 ```javascript
 // app/app.js
-import Resolver from 'app/resolvers/default';
+import AwesomeResolverMixin from 'app/mixins/awesome-resolver';
 import config from './config/environment';
 
-const resolver = Resolver.extend({
+
+const resolver = Ember.Resolver.extend(AwesomeResolverMixin, {
     moduleBasedResolver: true,
     namespaces: config.addons,
     pluralizedTypes: {
