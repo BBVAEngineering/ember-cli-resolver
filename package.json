@@ -1,6 +1,6 @@
 {
   "name": "ember-cli-awesome-resolver",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Awesome resolver for ember-cli projects",
   "directories": {
     "doc": "doc",
