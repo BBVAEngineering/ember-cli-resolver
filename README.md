@@ -24,6 +24,15 @@ This resolver allows to use any amd module namespace defined in the configuratio
 
 * `ember install ember-cli-resolver`
 
+## Dependencies
+
+* `bower install --save babel-polyfill`
+* Add babel-polyfill to your vendors tree:
+
+```javascript
+// ember-cli-build.js
+app.import('bower_components/babel-polyfill/browser-polyfill.js');
+```
 
 ## Usage
 
@@ -35,7 +44,8 @@ This resolver allows to use any amd module namespace defined in the configuratio
 
 ```javascript
 // app/app.js
-import AwesomeResolverMixin from 'app/mixins/awesome-resolver';
+// Replace '__app__' with your application name
+import AwesomeResolverMixin from '__app__/mixins/awesome-resolver';
 import config from './config/environment';
 
 
