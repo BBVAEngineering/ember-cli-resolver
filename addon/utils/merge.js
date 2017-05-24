@@ -22,7 +22,9 @@ function set(obj, key, val) {
 
 	if (isEmberObject(obj)) {
 		return obj.set(key, val);
-	} else if (descriptor && descriptor.set) {
+	}
+
+	if (descriptor && descriptor.set) {
 		return Ember.set(obj, key, val);
 	}
 
@@ -33,7 +35,9 @@ function getComputedPropertyMeta(obj, key) {
 	const proto = obj.constructor.proto();
 	const possibleDesc = proto[key];
 
-	return (possibleDesc !== null && typeof possibleDesc === 'object' && possibleDesc.isDescriptor) ? possibleDesc : undefined;
+	return (possibleDesc !== null && typeof possibleDesc === 'object' && possibleDesc.isDescriptor) ?
+		possibleDesc :
+		undefined;
 }
 
 function meta(obj, key) {
@@ -52,7 +56,7 @@ function isRecursive(object, key) {
 }
 
 function isPrivate(key) {
-	return !!key.match(/^__.*/);
+	return Boolean(key.match(/^__.*/));
 }
 
 function deepMerge(object1, object2) {
@@ -104,7 +108,7 @@ function deepMerge(object1, object2) {
 export default function merge(...objects) {
 	const main = objects.shift();
 
-	objects.forEach(function(object) {
+	objects.forEach((object) => {
 		deepMerge(main, object);
 	});
 
