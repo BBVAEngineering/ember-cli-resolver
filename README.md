@@ -42,7 +42,7 @@ import config from './config/environment';
 
 const Resolver = Ember.Resolver.extend(AwesomeResolverMixin, {
     moduleBasedResolver: true,
-    namespaces: config.addons,
+    namespaces: config.namespaces,
     pluralizedTypes: {
         config: 'config'
     }
@@ -64,7 +64,7 @@ export default App;
 
 module.exports = function(environment) {
   var ENV = {
-    addons: ['mynamespace', 'anothernamespace', ...],
+    namespaces: ['mynamespace', 'anothernamespace', ...],
 
     APP: {
       // Here you can pass flags/options to your application instance
