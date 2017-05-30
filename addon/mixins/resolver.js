@@ -215,13 +215,13 @@ function makeToString(namespace, type, name) {
  *
  * - Namespace: core
  * - Class name: route:application
- * - Module name: buzz-core/routes/application
+ * - Module name: dummy/routes/application
  *
  * More namespaces can be added using namespaces property of application.
  * By default, core is the only namespace.
  *
  * ```javascript
- * App.set('namespaces', ['app', 'buzz-core']);
+ * App.set('namespaces', ['app', 'dummy']);
  * ```
  *
  * @namespace BuzzCore
@@ -237,7 +237,7 @@ const ResolverMixin = Ember.Mixin.create({
 	 * @property namespaces
 	 * @type Array
 	 */
-	namespaces: ['buzz-core'],
+	namespaces: [],
 
 	/**
 	 * Define module based resolver.

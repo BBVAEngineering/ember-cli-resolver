@@ -7,7 +7,7 @@ function median(array) {
 function stripOutliers(array) {
 	const m = median(array);
 
-	return array.filter((a) => Math.abs(a - m) < m * 2);
+	return array.filter((a) => Math.abs(a - m) <= m * 2);
 }
 
 function sum(array) {
@@ -15,7 +15,7 @@ function sum(array) {
 }
 
 function mean(array) {
-	return sum(array) / (array.length || 1);
+	return sum(array) / array.length;
 }
 
 function sampleStdev(array) {
@@ -24,8 +24,8 @@ function sampleStdev(array) {
 
 	return Math.sqrt(
 		_array
-			.map((n) => Math.pow(n - _mean, 2))
-			.reduce((a, b) => a + b, 0) / (_array.length - 1)
+		.map((n) => Math.pow(n - _mean, 2))
+		.reduce((a, b) => a + b, 0) / (_array.length - 1)
 	);
 }
 
