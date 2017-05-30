@@ -35,8 +35,7 @@ This resolver allows to use any amd module namespace defined in the configuratio
 
 ```javascript
 // app/app.js
-// Replace '<app_name>' with your application name
-import AwesomeResolverMixin from '<app_name>/mixins/awesome-resolver';
+import AwesomeResolverMixin from 'ember-cli-awesome-resolver/mixins/awesome-resolver';
 import config from './config/environment';
 
 
