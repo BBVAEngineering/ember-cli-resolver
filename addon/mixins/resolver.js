@@ -258,7 +258,10 @@ export default Mixin.create({
 			});
 		}
 
-		this.set('namespaces', A());
+		if (!this.get('namespaces')) {
+			this.set('namespaces', A());
+		}
+
 		this._normalizeCache = {};
 		this._typeCache = {};
 		this._moduleCache = {};
