@@ -1,5 +1,4 @@
-# ember-cli-awesome-resolver [![Build Status](https://travis-ci.org/BBVAEngineering/ember-cli-awesome-resolver.svg?branch=master)](https://travis-ci.org/BBVAEngineering/ember-cli-awesome-resolver) [![GitHub version](https://badge.fury.io/gh/BBVAEngineering%2Fember-cli-awesome-resolver.svg)](https://badge.fury.io/gh/BBVAEngineering%2Fember-cli-awesome-resolver) [![Dependency Status](https://david-dm.org/BBVAEngineering/ember-cli-awesome-resolver.svg)](https://david-dm.org/BBVAEngineering/ember-cli-awesome-resolver)
-
+# ember-cli-awesome-resolver [![Build-Status](https://circleci.com/gh/BBVAEngineering/ember-cli-awesome-resolver.svg?style=shield&circle-token=:circle-token)![GitHub version](https://badge.fury.io/gh/BBVAEngineering%2Fember-cli-awesome-resolver.svg)](https://badge.fury.io/gh/BBVAEngineering%2Fember-cli-awesome-resolver) [![Dependency Status](https://david-dm.org/BBVAEngineering/ember-cli-awesome-resolver.svg)](https://david-dm.org/BBVAEngineering/ember-cli-awesome-resolver)
 This resolver allows to use any amd module namespace defined in the configuration file.
 
 ## Information
@@ -24,15 +23,6 @@ This resolver allows to use any amd module namespace defined in the configuratio
 
 * `ember install ember-cli-awesome-resolver`
 
-## Dependencies
-
-* `bower install --save babel-polyfill`
-* Add babel-polyfill to your vendors tree:
-
-```javascript
-// ember-cli-build.js
-app.import('bower_components/babel-polyfill/browser-polyfill.js');
-```
 
 ## Usage
 
@@ -44,14 +34,13 @@ app.import('bower_components/babel-polyfill/browser-polyfill.js');
 
 ```javascript
 // app/app.js
-// Replace '__app__' with your application name
-import AwesomeResolverMixin from '__app__/mixins/awesome-resolver';
+import AwesomeResolverMixin from 'ember-cli-awesome-resolver/mixins/awesome-resolver';
 import config from './config/environment';
 
 
-const resolver = Ember.Resolver.extend(AwesomeResolverMixin, {
+const Resolver = Ember.Resolver.extend(AwesomeResolverMixin, {
     moduleBasedResolver: true,
-    namespaces: config.addons,
+    namespaces: config.namespaces,
     pluralizedTypes: {
         config: 'config'
     }
@@ -68,6 +57,19 @@ const App = Ember.Application.extend({
 });
 
 export default App;
+
+// config/environment.js
+
+module.exports = function(environment) {
+  var ENV = {
+    namespaces: ['mynamespace', 'anothernamespace', ...],
+
+    APP: {
+      // Here you can pass flags/options to your application instance
+      // when it is created
+    }
+    ...
+
 ```
 
 ## Running

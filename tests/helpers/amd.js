@@ -1,19 +1,16 @@
 import Ember from 'ember';
 
-/**
- * Simplifies defining and requiring amd functions.
- *
- * @class AmdHelper
- * @public
- */
-const amd = {
+const { A } = Ember;
+
+export default {
+
 	/**
 	 * Array of defined modules.
 	 *
 	 * @property defines
 	 * @type Array
 	 */
-	defines: Ember.A([]),
+	defines:  A(),
 
 	/**
 	 * Define a moduleName with exported value.
@@ -40,7 +37,7 @@ const amd = {
 	require(moduleName) {
 		const module = require(moduleName, null, null, true);
 
-		if( this.defines.contains(moduleName) ) {
+		if (this.defines.includes(moduleName)) {
 			this._delete(moduleName);
 		}
 
@@ -70,9 +67,6 @@ const amd = {
 	_delete(moduleName) {
 		requirejs.unsee(moduleName);
 		delete requirejs.entries[moduleName];
-		const filtered = this.defines.reject((name) => name === moduleName);
-		this.defines = Ember.A(filtered);
+		this.defines = this.defines.filter((name) => name !== moduleName);
 	}
 };
-
-export default amd;

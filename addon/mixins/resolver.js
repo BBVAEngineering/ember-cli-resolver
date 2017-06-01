@@ -1,13 +1,16 @@
+/* eslint-disable max-statements, complexity */
 import Ember from 'ember';
-import merge from '../utils/merge';
-import entries from '../utils/entries';
+
+const globalTypes = ['engine', 'route-map'];
+const { decamelize, dasherize, classify } = Ember.String;
+const { Mixin, debug, set, A } = Ember;
 
 function normalize(name) {
 	// Replace all '_' and '.' for '/'.
 	name = name.replace(/([^\/_\.]+)[_\.]/g, '$1/');
 
 	// Decamelize and replace all new '_' for '-'.
-	return Ember.String.decamelize(name).replace(/([^\/_]+)[_]/g, '$1-');
+	return decamelize(name).replace(/([^\/_]+)[_]/g, '$1-');
 }
 
 function moduleExists(moduleName) {
@@ -18,7 +21,7 @@ function loadModule(moduleName) {
 	let module;
 
 	if (moduleExists(moduleName) && (module = require(moduleName, null, null, true))) {
-		module = module['default'];
+		module = module.default;
 
 		// Add module name information when is a class.
 		if (module.isClass) {
@@ -38,7 +41,7 @@ function formatModule(entry) {
 		return formatByMain(entry);
 	}
 
-	const podRegex = /^[^\/]+\/pods\//;
+	const podRegex = /^[^\/]+\/pods\/[^\/]+.\/[^\/]+/;
 
 	if (podRegex.test(entry)) {
 		return formatByPod(entry);
@@ -112,17 +115,28 @@ function parseName(fullName) {
 	let resolveMethodName, moduleName;
 
 	if (!prefix) {
-		const namespaces = Ember.A(this.get('namespace.namespaces') || this.get('namespaces'));
-
-		namespaces.any((namespace) => {
-			const entry = this.findModule(namespace, type, name);
-
-			if (entry) {
-				prefix = namespace;
-				moduleName = entry;
-				return true;
+		if (globalTypes.includes(type)) {
+			// Special case for route-map engines.
+			if (type === 'route-map') {
+				type = 'routes';
 			}
-		});
+
+			prefix = name;
+			moduleName = this.findModule(name, type, 'main');
+		} else {
+			const namespaces = this.get('namespace.namespaces') || this.get('namespaces');
+
+			namespaces.some((namespace) => {
+				const entry = this.findModule(namespace, type, name);
+
+				if (entry) {
+					prefix = namespace;
+					moduleName = entry;
+				}
+
+				return Boolean(entry);
+			});
+		}
 	} else {
 		moduleName = this.findModule(prefix, type, name);
 	}
@@ -130,7 +144,7 @@ function parseName(fullName) {
 	if (name === 'main') {
 		resolveMethodName = 'resolveMain';
 	} else {
-		resolveMethodName = 'resolve' + Ember.String.classify(type);
+		resolveMethodName = `resolve${classify(type)}`;
 	}
 
 	if (!this.get(resolveMethodName)) {
@@ -150,8 +164,38 @@ function parseName(fullName) {
 	};
 }
 
+function reopenModule(module) {
+	const regexp = /^([^\/]+)\/reopens\//;
+	const namespaces = this.get('namespace.namespaces') || this.get('namespaces');
+	const moduleName = module._moduleName;
+
+	Object.keys(requirejs.entries).forEach((entry) => {
+		const matches = regexp.exec(entry);
+
+		if (matches && namespaces.includes(matches[1])) {
+			const reopen = this._loadModule(entry);
+
+			if (reopen && moduleName === reopen.for) {
+				if (reopen.reopen) {
+					debug(`found reopen '${entry}' for '${moduleName}'`);
+					module.reopen(...reopen.reopen);
+				}
+
+				if (reopen.reopenClass) {
+					debug(`found class reopen '${entry}' for '${moduleName}'`);
+					module.reopenClass(...reopen.reopenClass);
+				}
+			}
+		}
+	});
+}
+
 function resolveModule(parsedName) {
 	const module = this._loadModule(parsedName.moduleName);
+
+	if (module && module.isClass) {
+		this._reopenModule(module);
+	}
 
 	return module || this._super(parsedName);
 }
@@ -169,22 +213,20 @@ function makeToString(namespace, type, name) {
  *
  * Conversion:
  *
- * - Namespace: core
  * - Class name: route:application
- * - Module name: core/routes/application
+ * - Module name: dummy/routes/application
  *
  * More namespaces can be added using namespaces property of application.
- * By default, core is the only namespace.
  *
  * ```javascript
- * App.set('namespaces', ['app', 'core']);
+ * App.set('namespaces', ['app', 'dummy']);
  * ```
  *
  * @class ResolverMixin
  * @extends Ember.Mixin
  * @public
  */
-const ResolverMixin = Ember.Mixin.create({
+export default Mixin.create({
 
 	/**
 	 * List of resolver namespaces.
@@ -192,7 +234,7 @@ const ResolverMixin = Ember.Mixin.create({
 	 * @property namespaces
 	 * @type Array
 	 */
-	namespaces: Ember.A([]),
+	namespaces: null,
 
 	/**
 	 * Define module based resolver.
@@ -208,12 +250,15 @@ const ResolverMixin = Ember.Mixin.create({
 	 * @method init
 	 */
 	init() {
-		this._super();
+		this._super(...arguments);
 
 		if (!this.get('pluralizedTypes')) {
-			this.set('pluralizedTypes', {});
+			this.set('pluralizedTypes', {
+				config: 'config'
+			});
 		}
 
+		this.set('namespaces', A());
 		this._normalizeCache = {};
 		this._typeCache = {};
 		this._moduleCache = {};
@@ -277,32 +322,51 @@ const ResolverMixin = Ember.Mixin.create({
 	 * @return Object
 	 */
 	knownForType(type) {
-		const namespaces = Ember.A(this.get('namespace.namespaces') || this.get('namespaces'));
+		const namespaces = this.get('namespace.namespaces') || this.get('namespaces');
 		const items = {};
 
 		if (this._typeCache[type]) {
 			return this._typeCache[type];
 		}
 
-		namespaces.forEach(function(namespace) {
-			const namespaceRegex = new RegExp(`^${namespace}\/`);
+		if (globalTypes.includes(type)) {
+			const regexp = /^[^\/]+\/(engine|routes)$/;
+			let moduleType = type;
 
-			for (let [entry] of entries(requirejs.entries)) {
-				if (type === 'component') {
-					entry = entry.replace(/pods\/components\//, 'pods/');
+			if (type === 'route-map') {
+				moduleType = 'routes';
+			}
+
+			Object.keys(requirejs.entries).forEach((entry) => {
+				if (regexp.test(entry)) {
+					const formatedModule = formatModule(entry);
+
+					if (formatedModule.type === moduleType) {
+						items[`${type}:${formatedModule.namespace}`] = true;
+					}
 				}
+			});
+		} else {
+			const regexp = /^([^\/]+)\//;
 
-				if (namespaceRegex.test(entry)) {
+			Object.keys(requirejs.entries).forEach((entry) => {
+				const matches = regexp.exec(entry);
+
+				if (matches && namespaces.includes(matches[1])) {
+					if (type === 'component') {
+						entry = entry.replace(/pods\/components\//, 'pods/');
+					}
+
 					const formatedModule = formatModule(entry);
 
 					if (formatedModule.type === type) {
-						items[`${formatedModule.type}:${formatedModule.name}`] = true;
+						items[`${type}:${formatedModule.name}`] = true;
 					}
 				}
-			}
-		});
+			});
+		}
 
-		merge(items, this._super(type));
+		Object.assign(items, this._super(type));
 
 		this._typeCache[type] = items;
 
@@ -336,6 +400,11 @@ const ResolverMixin = Ember.Mixin.create({
 		if (factory._moduleName) {
 			const formatedModule = formatModule(factory._moduleName);
 
+			// Special case for route-map engines.
+			if (formatedModule.type === 'routes') {
+				formatedModule.type = 'route-map';
+			}
+
 			stringName = makeToString(formatedModule.namespace, formatedModule.type, formatedModule.name);
 		}
 
@@ -352,7 +421,7 @@ const ResolverMixin = Ember.Mixin.create({
 	 * @return String
 	 */
 	pluralize(type) {
-		return this.get(`pluralizedTypes.${type}`) || Ember.set(this, `pluralizedTypes.${type}`, `${type}s`);
+		return this.get(`pluralizedTypes.${type}`) || set(this, `pluralizedTypes.${type}`, `${type}s`);
 	},
 
 	/**
@@ -377,7 +446,7 @@ const ResolverMixin = Ember.Mixin.create({
 	 */
 	findModule(namespace, type, name) {
 		const str = makeToString(namespace, type, name);
-		const resolvers = Ember.A([this.findModuleByMain, this.findModuleByType, this.findModuleByPod]);
+		const resolvers = A([this.findModuleByMain, this.findModuleByType, this.findModuleByPod]);
 
 		if (this._moduleCache[str]) {
 			return this._moduleCache[str];
@@ -404,11 +473,13 @@ const ResolverMixin = Ember.Mixin.create({
 	 * @return String
 	 */
 	findModuleByMain(namespace, type, name) {
-		type = Ember.String.dasherize(type);
+		type = dasherize(type);
 
 		if (name === 'main') {
 			return `${namespace}/${type}`;
 		}
+
+		return null;
 	},
 
 	/**
@@ -422,7 +493,7 @@ const ResolverMixin = Ember.Mixin.create({
 	 */
 	findModuleByType(namespace, type, name) {
 		name = normalize(name);
-		type = this.pluralize(Ember.String.dasherize(type));
+		type = this.pluralize(dasherize(type));
 
 		return `${namespace}/${type}/${name}`;
 	},
@@ -439,10 +510,10 @@ const ResolverMixin = Ember.Mixin.create({
 	findModuleByPod(namespace, type, name) {
 		// Remove '-' and '_' when is first letter.
 		name = normalize(name).replace(/(^|\/)[_-](.+)/, '$1$2');
-		type = Ember.String.dasherize(type);
+		type = dasherize(type);
 
 		if (type === 'component') {
-			name = 'components/' + name;
+			name = `components/${name}`;
 		}
 
 		return `${namespace}/pods/${name}/${type}`;
@@ -469,8 +540,14 @@ const ResolverMixin = Ember.Mixin.create({
 	 * @param {Object} moduleName
 	 * @return Object
 	 */
-	_loadModule: loadModule
+	_loadModule: loadModule,
+
+	/**
+	 * Reopen module.
+	 *
+	 * @method _reopenModule
+	 * @param {Object} module
+	 */
+	_reopenModule: reopenModule
 
 });
-
-export default ResolverMixin;

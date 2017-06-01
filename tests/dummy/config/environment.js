@@ -14,7 +14,7 @@ module.exports = function(environment) {
       }
     },
 
-    namespaces: ['test'],
+    namespaces: ['dummy'],
 
     APP: {
       // Here you can pass flags/options to your application instance
