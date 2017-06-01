@@ -10,7 +10,7 @@ export default {
 	 * @property defines
 	 * @type Array
 	 */
-	defines:  A([]),
+	defines:  A(),
 
 	/**
 	 * Define a moduleName with exported value.
