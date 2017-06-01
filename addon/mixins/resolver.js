@@ -229,18 +229,6 @@ function makeToString(namespace, type, name) {
 export default Mixin.create({
 
 	/**
-	 * Init hook.
-	 * Initialize namespaces to empty array
-	 *
-	 * @method init
-	 */
-	init() {
-		this._super(...arguments);
-
-		this.set('namespaces', A([]));
-	},
-
-	/**
 	 * List of resolver namespaces.
 	 *
 	 * @property namespaces
@@ -270,6 +258,7 @@ export default Mixin.create({
 			});
 		}
 
+		this.set('namespaces', A());
 		this._normalizeCache = {};
 		this._typeCache = {};
 		this._moduleCache = {};
