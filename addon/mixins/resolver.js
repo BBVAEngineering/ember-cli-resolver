@@ -1,9 +1,9 @@
 /* eslint-disable max-statements, complexity */
 import Ember from 'ember';
-import merge from '../utils/merge';
 
 const globalTypes = ['engine', 'route-map'];
 const { decamelize, dasherize, classify } = Ember.String;
+const { Mixin, debug, set, A } = Ember;
 
 function normalize(name) {
 	// Replace all '_' and '.' for '/'.
@@ -177,12 +177,12 @@ function reopenModule(module) {
 
 			if (reopen && moduleName === reopen.for) {
 				if (reopen.reopen) {
-					Ember.debug(`found reopen '${entry}' for '${moduleName}'`);
+					debug(`found reopen '${entry}' for '${moduleName}'`);
 					module.reopen(...reopen.reopen);
 				}
 
 				if (reopen.reopenClass) {
-					Ember.debug(`found class reopen '${entry}' for '${moduleName}'`);
+					debug(`found class reopen '${entry}' for '${moduleName}'`);
 					module.reopenClass(...reopen.reopenClass);
 				}
 			}
@@ -213,23 +213,32 @@ function makeToString(namespace, type, name) {
  *
  * Conversion:
  *
- * - Namespace: core
  * - Class name: route:application
  * - Module name: dummy/routes/application
  *
  * More namespaces can be added using namespaces property of application.
- * By default, core is the only namespace.
  *
  * ```javascript
  * App.set('namespaces', ['app', 'dummy']);
  * ```
  *
- * @namespace BuzzCore
  * @class ResolverMixin
  * @extends Ember.Mixin
  * @public
  */
-const ResolverMixin = Ember.Mixin.create({
+export default Mixin.create({
+
+	/**
+	 * Init hook.
+	 * Initialize namespaces to empty array
+	 *
+	 * @method init
+	 */
+	init() {
+		this._super(...arguments);
+
+		this.set('namespaces', A([]));
+	},
 
 	/**
 	 * List of resolver namespaces.
@@ -237,7 +246,7 @@ const ResolverMixin = Ember.Mixin.create({
 	 * @property namespaces
 	 * @type Array
 	 */
-	namespaces: [],
+	namespaces: null,
 
 	/**
 	 * Define module based resolver.
@@ -368,7 +377,7 @@ const ResolverMixin = Ember.Mixin.create({
 			});
 		}
 
-		merge(items, this._super(type));
+		Object.assign(items, this._super(type));
 
 		this._typeCache[type] = items;
 
@@ -423,7 +432,7 @@ const ResolverMixin = Ember.Mixin.create({
 	 * @return String
 	 */
 	pluralize(type) {
-		return this.get(`pluralizedTypes.${type}`) || Ember.set(this, `pluralizedTypes.${type}`, `${type}s`);
+		return this.get(`pluralizedTypes.${type}`) || set(this, `pluralizedTypes.${type}`, `${type}s`);
 	},
 
 	/**
@@ -448,7 +457,7 @@ const ResolverMixin = Ember.Mixin.create({
 	 */
 	findModule(namespace, type, name) {
 		const str = makeToString(namespace, type, name);
-		const resolvers = Ember.A([this.findModuleByMain, this.findModuleByType, this.findModuleByPod]);
+		const resolvers = A([this.findModuleByMain, this.findModuleByType, this.findModuleByPod]);
 
 		if (this._moduleCache[str]) {
 			return this._moduleCache[str];
@@ -553,5 +562,3 @@ const ResolverMixin = Ember.Mixin.create({
 	_reopenModule: reopenModule
 
 });
-
-export default ResolverMixin;

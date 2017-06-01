@@ -1,7 +1,7 @@
 import Ember from 'ember';
 import { module, test } from 'qunit';
 import ResolverMixin from 'ember-cli-awesome-resolver/mixins/resolver';
-import cases from '../helpers/cases';
+import cases from 'qunit-parameterize';
 import amd from '../helpers/amd';
 import profile from '../helpers/profile';
 import startApp from '../helpers/start-app';

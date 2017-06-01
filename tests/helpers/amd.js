@@ -1,3 +1,7 @@
+import Ember from 'ember';
+
+const { A } = Ember;
+
 export default {
 
 	/**
@@ -6,7 +10,7 @@ export default {
 	 * @property defines
 	 * @type Array
 	 */
-	defines: [],
+	defines:  A([]),
 
 	/**
 	 * Define a moduleName with exported value.
