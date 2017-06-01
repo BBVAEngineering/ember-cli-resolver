@@ -13,22 +13,23 @@ import Ember from 'ember';
  * @param  {Object} obj
  * @return  Array
  */
-export default function * entries(obj) {
-	if (!obj) {
-		throw new Error('Cannot iterate over empty or null object');
-	}
+export default function* entries(obj) {
+    if (!obj) {
+        throw new Error('Cannot iterate over empty or null object');
+    }
 
-	for (const key of Object.keys(obj)) {
-		yield [key, obj[key]];
-	}
+    for (const key in obj) {
+        if (obj.hasOwnProperty(key)) {
+            yield [key, obj[key]];
+        }
+    }
 
-	if (Ember.Object.detectInstance(obj)) {
-		const klass = obj.constructor;
-		const properties = Ember.get(klass, '_computedProperties');
+    if (Ember.Object.detectInstance(obj)) {
+        const klass = obj.constructor;
+        const properties = Ember.get(klass, '_computedProperties');
 
-		for (const { name }
-			of properties) {
-			yield [name, obj.get(name)];
-		}
-	}
+        for (const { name } of properties) {
+            yield [name, obj.get(name)];
+        }
+    }
 }
