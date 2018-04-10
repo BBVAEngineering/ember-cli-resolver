@@ -1,4 +1,10 @@
-# ember-cli-awesome-resolver [![Build Status](https://travis-ci.org/BBVAEngineering/ember-cli-awesome-resolver.svg?branch=master)](https://travis-ci.org/BBVAEngineering/ember-cli-awesome-resolver) [![GitHub version](https://badge.fury.io/gh/BBVAEngineering%2Fember-cli-awesome-resolver.svg)](https://badge.fury.io/gh/BBVAEngineering%2Fember-cli-awesome-resolver) [![Dependency Status](https://david-dm.org/BBVAEngineering/ember-cli-awesome-resolver.svg)](https://david-dm.org/BBVAEngineering/ember-cli-awesome-resolver)
+# ember-cli-awesome-resolver
+
+[![Build Status](https://travis-ci.org/BBVAEngineering/ember-cli-awesome-resolver.svg?branch=master)](https://travis-ci.org/BBVAEngineering/ember-cli-awesome-resolver)
+[![GitHub version](https://badge.fury.io/gh/BBVAEngineering%2Fember-cli-awesome-resolver.svg)](https://badge.fury.io/gh/BBVAEngineering%2Fember-cli-awesome-resolver)
+[![npm version](https://badge.fury.io/js/ember-cli-awesome-resolver.svg)](https://badge.fury.io/js/ember-cli-awesome-resolver)
+[![Dependency Status](https://david-dm.org/BBVAEngineering/ember-cli-awesome-resolver.svg)](https://david-dm.org/BBVAEngineering/ember-cli-awesome-resolver)
+
 This resolver allows to use any amd module namespace defined in the configuration file.
 
 ## Information
@@ -72,19 +78,18 @@ module.exports = function(environment) {
 
 ```
 
-## Running
+## Contribute
 
-* `ember server`
-* Visit your app at http://localhost:4200.
+If you want to contribute to this addon, please read the [CONTRIBUTING.md](CONTRIBUTING.md).
 
-## Running Tests
+## Versioning
 
-* `npm test` (Runs `ember try:testall` to test your addon against multiple Ember versions)
-* `ember test`
-* `ember test --server`
+We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/BBVAEngineering/ember-cli-awesome-resolver/tags).
 
-## Building
+## Authors
 
-* `ember build`
+See the list of [contributors](https://github.com/BBVAEngineering/ember-cli-awesome-resolver/contributors) who participated in this project.
 
-For more information on using ember-cli, visit [http://www.ember-cli.com/](http://www.ember-cli.com/).
+## License
+
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details

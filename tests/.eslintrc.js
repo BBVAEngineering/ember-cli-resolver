@@ -2,5 +2,7 @@
 'use strict';
 
 module.exports = {
-	name: 'ember-cli-awesome-resolver'
+    env: {
+      embertest: true
+    }
 };
