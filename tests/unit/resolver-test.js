@@ -67,7 +67,7 @@ cases([
 	{ title: 'pod partial cli', input: 'object:-foo-bar', output: 'dummy/pods/foo-bar/object' },
 	{ title: 'pod partial cli namespace', input: 'template:foo/-foo-bar', output: 'dummy/pods/foo/foo-bar/template' },
 	{ title: 'pod multi', input: 'object:foo.bar.wow', output: 'dummy/pods/foo/bar/wow/object' }
-]).test('it loads modules from loader.js ', function(params, assert) {
+]).test('it loads modules from loader.js ', (params, assert) => {
 	const object = Ember.Object.extend();
 
 	amd.define(params.output, object);
@@ -75,7 +75,7 @@ cases([
 	assert.equal(registry.resolve(params.input), object);
 });
 
-test('it loads components modules from loader.js', function(assert) {
+test('it loads components modules from loader.js', (assert) => {
 	const object = Ember.Component.extend();
 
 	amd.define('dummy/pods/components/foo/component', object);
@@ -83,7 +83,7 @@ test('it loads components modules from loader.js', function(assert) {
 	assert.equal(registry.resolve('component:foo'), object);
 });
 
-test('it looks up for namespaces in application', function(assert) {
+test('it looks up for namespaces in application', (assert) => {
 	application.set('namespaces', ['app', 'dummy']);
 
 	const object = Ember.Object.extend();
@@ -110,7 +110,7 @@ cases([
 	// Pod based.
 	{ title: 'pod base', type: 'object', input: 'dummy/pods/bar/object', output: 'object:bar' },
 	{ title: 'pod complex', type: 'object', input: 'dummy/pods/bar/baz/object', output: 'object:bar/baz' }
-]).test('it looks up for a type given ', function(params, assert) {
+]).test('it looks up for a type given ', (params, assert) => {
 	const object = Ember.Object.extend();
 
 	amd.define(params.input, object);
@@ -118,7 +118,7 @@ cases([
 	assert.ok(registry.knownForType(params.type)[params.output]);
 });
 
-test('it looks up for components', function(assert) {
+test('it looks up for components', (assert) => {
 	const object = Ember.Component.extend();
 
 	amd.define('dummy/pods/components/foo/component', object);
@@ -126,7 +126,7 @@ test('it looks up for components', function(assert) {
 	assert.ok(registry.knownForType('component')['component:foo']);
 });
 
-test('it looks up only on defined namespaces', function(assert) {
+test('it looks up only on defined namespaces', (assert) => {
 	const object = Ember.Component.extend();
 
 	amd.define('foo/pods/components/foo/component', object);
@@ -134,7 +134,7 @@ test('it looks up only on defined namespaces', function(assert) {
 	assert.notOk(registry.knownForType('component')['component:foo']);
 });
 
-test('it does not lookup on other types', function(assert) {
+test('it does not lookup on other types', (assert) => {
 	const object = Ember.Component.extend();
 
 	amd.define('dummy/controllers/foo', object);
@@ -159,7 +159,7 @@ cases([
 	// Pod based.
 	{ title: 'pod base', input: 'dummy/pods/bar/object', output: 'object:bar' },
 	{ title: 'pod complex', input: 'dummy/pods/bar/baz/object', output: 'object:bar/baz' }
-]).test('it lookups description of modules ', function(params, assert) {
+]).test('it lookups description of modules ', (params, assert) => {
 	const object = Ember.Object.extend();
 
 	amd.define(params.input, object);
@@ -167,7 +167,7 @@ cases([
 	assert.equal(registry.describe(params.output), params.input);
 });
 
-test('it makes up description to string when module is not found', function(assert) {
+test('it makes up description to string when module is not found', (assert) => {
 	assert.equal(registry.describe('object:main'), `${application.name}@object:main`);
 });
 
@@ -188,7 +188,7 @@ cases([
 	// Pod based.
 	{ title: 'pod base', input: 'dummy/pods/bar/object', output: 'object:bar', toString: 'dummy@object:bar' },
 	{ title: 'pod complex', input: 'dummy/pods/bar/baz/object', output: 'object:bar/baz', toString: 'dummy@object:bar/baz' }
-]).test('it makes object to string', function(params, assert) {
+]).test('it makes object to string', (params, assert) => {
 	const object = Ember.Object.extend();
 
 	amd.define(params.input, object);
@@ -198,7 +198,7 @@ cases([
 	assert.equal(registry.resolver.makeToString(factory, params.output), params.toString);
 });
 
-test('it resolves non factory modules', function(assert) {
+test('it resolves non factory modules', (assert) => {
 	const object = {};
 
 	amd.define('dummy/objects/foo', object);
@@ -206,7 +206,7 @@ test('it resolves non factory modules', function(assert) {
 	assert.equal(registry.resolve('object:foo'), object);
 });
 
-test('it resolves names with namespace', function(assert) {
+test('it resolves names with namespace', (assert) => {
 	const object = Ember.Object.extend();
 
 	amd.define('dummy/objects/foo', object);
@@ -214,7 +214,7 @@ test('it resolves names with namespace', function(assert) {
 	assert.equal(registry.resolve('dummy@object:foo'), object);
 });
 
-test('it resolves names with ember cli namespace', function(assert) {
+test('it resolves names with ember cli namespace', (assert) => {
 	const object = Ember.Object.extend();
 
 	amd.define('dummy/objects/foo', object);
@@ -222,7 +222,7 @@ test('it resolves names with ember cli namespace', function(assert) {
 	assert.equal(registry.resolve('object:dummy@foo'), object);
 });
 
-test('it does not throw an error when there are unknown modules', function(assert) {
+test('it does not throw an error when there are unknown modules', (assert) => {
 	const object = Ember.Object.extend();
 
 	amd.define('dummy/objects/foo', object);
@@ -232,7 +232,7 @@ test('it does not throw an error when there are unknown modules', function(asser
 	assert.ok(registry.knownForType('object'));
 });
 
-test('it looks up on pluralized dictionary', function(assert) {
+test('it looks up on pluralized dictionary', (assert) => {
 	Ember.run(application, 'destroy');
 
 	const object = Ember.Object.extend();
@@ -252,7 +252,7 @@ test('it looks up on pluralized dictionary', function(assert) {
 	assert.equal(registry.resolve('config:foo'), object);
 });
 
-test('it is a module based resolver', function(assert) {
+test('it is a module based resolver', (assert) => {
 	assert.equal(registry.resolver.get('moduleBasedResolver'), true);
 });
 
@@ -273,7 +273,7 @@ cases([
 	// Pod based.
 	{ title: 'pod base', input: 'dummy/pods/bar/object', output: 'object:bar' },
 	{ title: 'pod complex', input: 'dummy/pods/bar/baz/object', output: 'object:bar/baz' }
-]).test('it resolves under 1 ms ', function(params, assert) {
+]).test('it resolves under 1 ms ', (params, assert) => {
 	const object = Ember.Component.extend();
 
 	amd.define(params.input, object);
@@ -302,7 +302,7 @@ cases([
 	// Pod based.
 	{ title: 'pod base', type: 'object', input: 'dummy/pods/bar/object', output: 'object:bar' },
 	{ title: 'pod complex', type: 'object', input: 'dummy/pods/bar/baz/object', output: 'object:bar/baz' }
-]).test('it knows for types under 1 ms ', function(params, assert) {
+]).test('it knows for types under 1 ms ', (params, assert) => {
 	const object = Ember.Component.extend();
 
 	amd.define(params.input, object);
@@ -331,7 +331,7 @@ cases([
 	// Pod based.
 	{ title: 'pod base', input: 'dummy/pods/bar/object', output: 'object:bar' },
 	{ title: 'pod complex', input: 'dummy/pods/bar/baz/object', output: 'object:bar/baz' }
-]).test('it resolves under 1 ms ', function(params, assert) {
+]).test('it resolves under 1 ms ', (params, assert) => {
 	const object = Ember.Component.extend();
 
 	amd.define(params.input, object);
@@ -345,7 +345,7 @@ cases([
 	assert.ok(res.mean < 1, 'resolves under 1 ms');
 });
 
-test('it reopens module with properties when resolved', function(assert) {
+test('it reopens module with properties when resolved', (assert) => {
 	const moduleName = 'dummy/object';
 	const reopenModule = 'dummy/reopens/object';
 	const object = Ember.Object.extend();
@@ -368,7 +368,7 @@ test('it reopens module with properties when resolved', function(assert) {
 	assert.equal(resolved.PrototypeMixin.mixins[2].properties, reopen.reopen[1], 'reopen matches with second defined');
 });
 
-test('it reopens module with mixin when resolved', function(assert) {
+test('it reopens module with mixin when resolved', (assert) => {
 	const moduleName = 'dummy/object';
 	const reopenModule = 'dummy/reopens/object';
 	const object = Ember.Object.extend();
@@ -386,7 +386,7 @@ test('it reopens module with mixin when resolved', function(assert) {
 	assert.equal(resolved.PrototypeMixin.mixins[1], reopen.reopen[0], 'reopen matches with defined');
 });
 
-test('it reopens class with properties when resolved', function(assert) {
+test('it reopens class with properties when resolved', (assert) => {
 	const moduleName = 'dummy/object';
 	const reopenModule = 'dummy/reopens/object';
 	const object = Ember.Object.extend();
@@ -408,7 +408,7 @@ test('it reopens class with properties when resolved', function(assert) {
 	assert.equal(resolved.bar, 'foo', 'reopen matches with second defined');
 });
 
-test('it reopens class with properties when resolved', function(assert) {
+test('it reopens class with properties when resolved', (assert) => {
 	const moduleName = 'dummy/object';
 	const reopenModule = 'dummy/reopens/object';
 	const object = Ember.Object.extend();

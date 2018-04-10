@@ -3,7 +3,7 @@ import amd from '../helpers/amd';
 
 module('Helper: amd');
 
-test('it defines a module exporting a value', function(assert) {
+test('it defines a module exporting a value', (assert) => {
 	const value = {};
 
 	assert.notOk(requirejs.entries['foo']);
@@ -15,7 +15,7 @@ test('it defines a module exporting a value', function(assert) {
 	amd.reset();
 });
 
-test('it requires a module with its value and undefines it', function(assert) {
+test('it requires a module with its value and undefines it', (assert) => {
 	const value = {};
 
 	amd.define('foo', value);
@@ -24,12 +24,12 @@ test('it requires a module with its value and undefines it', function(assert) {
 	assert.notOk(requirejs.entries['foo']);
 });
 
-test('it does not undefine a module registered from outside', function(assert) {
+test('it does not undefine a module registered from outside', (assert) => {
 	assert.ok(amd.require('ember-cli-awesome-resolver/mixins/resolver'));
 	assert.ok(requirejs.entries['ember-cli-awesome-resolver/mixins/resolver']);
 });
 
-test('it reset all registered modules', function(assert) {
+test('it reset all registered modules', (assert) => {
 	amd.define('foo', {});
 	amd.define('bar', {});
 
