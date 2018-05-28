@@ -62,10 +62,10 @@ cases([
 	{ title: 'pod dash namespace', input: 'template:foo/foo-bar', output: 'dummy/pods/foo/foo-bar/template' },
 	{ title: 'pod lowdash', input: 'object:foo_bar', output: 'dummy/pods/foo/bar/object' },
 	{ title: 'pod lowdash namespace', input: 'template:foo/foo_bar', output: 'dummy/pods/foo/foo/bar/template' },
-	{ title: 'pod partial', input: 'object:_foo-bar', output: 'dummy/pods/foo-bar/object' },
-	{ title: 'pod partial namespace', input: 'template:foo/_foo-bar', output: 'dummy/pods/foo/foo-bar/template' },
-	{ title: 'pod partial cli', input: 'object:-foo-bar', output: 'dummy/pods/foo-bar/object' },
-	{ title: 'pod partial cli namespace', input: 'template:foo/-foo-bar', output: 'dummy/pods/foo/foo-bar/template' },
+	{ title: 'pod partial', input: 'object:_foo-bar', output: 'dummy/pods/_foo-bar/object' },
+	{ title: 'pod partial namespace', input: 'template:foo/_foo-bar', output: 'dummy/pods/foo/_foo-bar/template' },
+	{ title: 'pod partial cli', input: 'object:-foo-bar', output: 'dummy/pods/-foo-bar/object' },
+	{ title: 'pod partial cli namespace', input: 'template:foo/-foo-bar', output: 'dummy/pods/foo/-foo-bar/template' },
 	{ title: 'pod multi', input: 'object:foo.bar.wow', output: 'dummy/pods/foo/bar/wow/object' }
 ]).test('it loads modules from loader.js ', (params, assert) => {
 	const object = Ember.Object.extend();
