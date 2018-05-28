@@ -511,8 +511,7 @@ export default Mixin.create({
 	 * @return String
 	 */
 	findModuleByPod(namespace, type, name) {
-		// Remove '-' and '_' when is first letter.
-		name = normalize(name).replace(/(^|\/)[_-](.+)/, '$1$2');
+		name = normalize(name);
 		type = dasherize(type);
 
 		if (type === 'component') {
