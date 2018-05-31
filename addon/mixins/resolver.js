@@ -476,19 +476,23 @@ export default Mixin.create({
 			return this._moduleCache[str];
 		}
 
-		const moduleEntry = resolvers.reduce((acc, resolver) => {
-			const entry = resolver.call(this, namespace, type, name);
+		let foundEntry = null;
 
-			if (moduleExists(entry) && entry) {
-				return moduleExists(entry) && entry;
+		const moduleEntry = resolvers.any((resolver) => {
+			const entry = resolver.call(this, namespace, type, name);
+			const existEntry = moduleExists(entry) && entry;
+
+			if (existEntry) {
+				foundEntry = existEntry;
 			}
 
-			return acc;
-		}, '');
+			return existEntry;
+		});
+		const module = moduleEntry && foundEntry;
 
-		this._moduleCache[str] = moduleEntry;
+		this._moduleCache[str] = module;
 
-		return moduleEntry;
+		return module;
 	},
 
 	/**
