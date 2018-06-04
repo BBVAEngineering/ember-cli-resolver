@@ -2,8 +2,17 @@
 import Ember from 'ember';
 
 const globalTypes = ['engine', 'route-map'];
-const { decamelize, dasherize, classify } = Ember.String;
-const { Mixin, debug, set, A } = Ember;
+const {
+	decamelize,
+	dasherize,
+	classify
+} = Ember.String;
+const {
+	Mixin,
+	debug,
+	set,
+	A
+} = Ember;
 
 function normalize(name) {
 	// Replace all '_' and '.' for '/'.
@@ -59,7 +68,11 @@ function formatModule(entry) {
 function formatByMain(entry) {
 	let [, namespace, type] = /^([^\/]+)\/([^\/]+)$/.exec(entry); //eslint-disable-line
 
-	return { namespace, type, name: 'main' };
+	return {
+		namespace,
+		type,
+		name: 'main'
+	};
 }
 
 function formatByType(entry) {
@@ -68,13 +81,21 @@ function formatByType(entry) {
 	// Remove plural from type.
 	type = type.substr(0, type.length - 1);
 
-	return { namespace, type, name };
+	return {
+		namespace,
+		type,
+		name
+	};
 }
 
 function formatByPod(entry) {
 	let [, namespace, name, type] = /^([^\/]+)\/pods\/(.+)\/(.+)$/.exec(entry); //eslint-disable-line
 
-	return { namespace, type, name };
+	return {
+		namespace,
+		type,
+		name
+	};
 }
 
 function parseName(fullName) {
@@ -455,15 +476,23 @@ export default Mixin.create({
 			return this._moduleCache[str];
 		}
 
+		let foundEntry = null;
+
 		const moduleEntry = resolvers.any((resolver) => {
 			const entry = resolver.call(this, namespace, type, name);
+			const existEntry = moduleExists(entry) && entry;
 
-			return moduleExists(entry) && entry;
+			if (existEntry) {
+				foundEntry = existEntry;
+			}
+
+			return existEntry;
 		});
+		const module = moduleEntry && foundEntry;
 
-		this._moduleCache[str] = moduleEntry;
+		this._moduleCache[str] = module;
 
-		return moduleEntry;
+		return module;
 	},
 
 	/**
