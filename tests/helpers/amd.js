@@ -21,7 +21,7 @@ export default {
 	 */
 	define(moduleName, value) {
 		define(moduleName, ['exports'], (exports) => {
-			exports['default'] = value;
+			exports.default = value;
 		});
 
 		this.defines.push(moduleName);

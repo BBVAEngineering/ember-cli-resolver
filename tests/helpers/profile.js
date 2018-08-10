@@ -23,9 +23,7 @@ function sampleStdev(array) {
 	const _mean = mean(_array);
 
 	return Math.sqrt(
-		_array
-		.map((n) => Math.pow(n - _mean, 2))
-		.reduce((a, b) => a + b, 0) / (_array.length - 1)
+		_array.map((n) => Math.pow(n - _mean, 2)).reduce((a, b) => a + b, 0) / (_array.length - 1)
 	);
 }
 
@@ -39,7 +37,10 @@ function sampleStdev(array) {
  * @param  {Number}   times
  * @return Object
  */
-export default function profile(callback, times = 100) {
+
+const TIMES = 100;
+
+export default function profile(callback, times = TIMES) {
 	const results = [];
 
 	while (times--) {

@@ -3,7 +3,7 @@ module.exports = function(environment) {
 	const ENV = {
 		modulePrefix: 'dummy',
 		podModulePrefix: 'dummy/pods',
-		environment: environment,
+		environment,
 		baseURL: '/',
 		locationType: 'auto',
 		EmberENV: {
@@ -39,10 +39,6 @@ module.exports = function(environment) {
 		ENV.APP.LOG_VIEW_LOOKUPS = false;
 
 		ENV.APP.rootElement = '#ember-testing';
-	}
-
-	if (environment === 'production') {
-
 	}
 
 	return ENV;

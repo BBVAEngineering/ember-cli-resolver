@@ -278,9 +278,7 @@ cases([
 
 	amd.define(params.input, object);
 
-	const res = profile(() => {
-		return registry.resolve(params.output);
-	});
+	const res = profile(() => registry.resolve(params.output));
 
 	assert.ok(res.mean < 1, 'resolves under 1 ms');
 });
@@ -307,9 +305,7 @@ cases([
 
 	amd.define(params.input, object);
 
-	const res = profile(() => {
-		return registry.knownForType(params.type)[params.output];
-	});
+	const res = profile(() => registry.knownForType(params.type)[params.output]);
 
 	assert.ok(res.mean < 1, 'resolves under 1 ms');
 });
