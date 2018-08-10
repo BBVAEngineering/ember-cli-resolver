@@ -255,7 +255,7 @@ export default Mixin.create({
 	 * @property namespaces
 	 * @type Array
 	 */
-	namespaces: null,
+	namespace: null,
 
 	/**
 	 * Define module based resolver.
@@ -279,8 +279,8 @@ export default Mixin.create({
 			});
 		}
 
-		if (!this.get('namespaces')) {
-			this.set('namespaces', A());
+		if (!this.get('namespace')) {
+			this.set('namespace', A());
 		}
 
 		this._normalizeCache = {};
