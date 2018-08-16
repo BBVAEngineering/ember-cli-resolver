@@ -21,7 +21,7 @@ test('it requires a module with its value and undefines it', (assert) => {
 	amd.define('foo', value);
 
 	assert.equal(amd.require('foo'), value);
-	assert.notOk(requirejs.entriesfoo);
+	assert.notOk(requirejs.entries.foo);
 });
 
 test('it does not undefine a module registered from outside', (assert) => {
