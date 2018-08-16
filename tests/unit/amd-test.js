@@ -6,11 +6,11 @@ module('Helper: amd');
 test('it defines a module exporting a value', (assert) => {
 	const value = {};
 
-	assert.notOk(requirejs.entries['foo']);
+	assert.notOk(requirejs.entries.foo);
 
 	amd.define('foo', value);
 
-	assert.ok(requirejs.entries['foo']);
+	assert.ok(requirejs.entries.foo);
 
 	amd.reset();
 });
@@ -21,7 +21,7 @@ test('it requires a module with its value and undefines it', (assert) => {
 	amd.define('foo', value);
 
 	assert.equal(amd.require('foo'), value);
-	assert.notOk(requirejs.entries['foo']);
+	assert.notOk(requirejs.entries.foo);
 });
 
 test('it does not undefine a module registered from outside', (assert) => {
@@ -35,6 +35,6 @@ test('it reset all registered modules', (assert) => {
 
 	amd.reset();
 
-	assert.notOk(requirejs.entries['foo']);
-	assert.notOk(requirejs.entries['bar']);
+	assert.notOk(requirejs.entries.foo);
+	assert.notOk(requirejs.entries.bar);
 });
