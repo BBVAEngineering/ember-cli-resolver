@@ -22,7 +22,6 @@ function moduleExists(moduleName) {
 function loadModule(moduleName) {
 	let module;
 
-	/* istanbul ignore else */
 	if (moduleExists(moduleName) && (module = require(moduleName, null, null, true))) {
 		module = module.default;
 
@@ -52,12 +51,10 @@ function formatModule(entry) {
 
 	const typeRegex = /^(?:[^/]+\/){2}.*$/;
 
-	/* istanbul ignore else */
 	if (typeRegex.test(entry)) {
 		return formatByType(entry);
 	}
 
-	/* istanbul ignore next */
 	return entry;
 }
 
@@ -96,7 +93,6 @@ function formatByPod(entry) {
 
 function parseName(fullName) {
 	// Fix for Ember CLI resolver integration.
-	/* istanbul ignore if */
 	if (fullName.parsedName === true) {
 		return fullName;
 	}
@@ -193,7 +189,6 @@ function reopenModule(module) {
 		if (matches && namespaces.includes(matches[1])) {
 			const reopen = this._loadModule(entry);
 
-			/* istanbul ignore else */
 			if (reopen && moduleName === reopen.for) {
 				if (reopen.reopen) {
 					debug(`found reopen '${entry}' for '${moduleName}'`);
@@ -216,7 +211,6 @@ function resolveModule(parsedName) {
 		this._reopenModule(module);
 	}
 
-	/* istanbul ignore next */
 	return module || this._super(parsedName);
 }
 
@@ -274,14 +268,12 @@ export default Mixin.create({
 
 		// Fallback code
 
-		/* istanbul ignore if */
 		if (!this.get('pluralizedTypes')) {
 			this.set('pluralizedTypes', {
 				config: 'config'
 			});
 		}
 
-		/* istanbul ignore if */
 		if (!this.get('namespaces')) {
 			this.set('namespaces', A());
 		}
@@ -432,7 +424,6 @@ export default Mixin.create({
 
 		let stringName = this._super(factory, fullName);
 
-		/* istanbul ignore else */
 		if (factory._moduleName) {
 			const formatedModule = formatModule(factory._moduleName);
 
