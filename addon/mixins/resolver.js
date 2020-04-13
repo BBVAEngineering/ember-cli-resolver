@@ -1,25 +1,18 @@
-/* eslint-disable max-statements, complexity */
-import Ember from 'ember';
+/* eslint-disable max-statements, complexity, ember/no-new-mixins */
+import Mixin from '@ember/object/mixin';
+import { debug } from '@ember/debug';
+import { set } from '@ember/object';
+import { A } from '@ember/array';
+import { classify, dasherize, decamelize } from '@ember/string';
 
 const globalTypes = ['engine', 'route-map'];
-const {
-	decamelize,
-	dasherize,
-	classify
-} = Ember.String;
-const {
-	Mixin,
-	debug,
-	set,
-	A
-} = Ember;
 
 function normalize(name) {
 	// Replace all '_' and '.' for '/'.
-	name = name.replace(/([^\/_\.]+)[_\.]/g, '$1/');
+	name = name.replace(/([^./_]+)[._]/g, '$1/');
 
 	// Decamelize and replace all new '_' for '-'.
-	return decamelize(name).replace(/([^\/_]+)[_]/g, '$1-');
+	return decamelize(name).replace(/([^/_]+)_/g, '$1-');
 }
 
 function moduleExists(moduleName) {
@@ -44,19 +37,19 @@ function loadModule(moduleName) {
 }
 
 function formatModule(entry) {
-	const mainRegex = /^[^\/]+\/[^\/]+$/;
+	const mainRegex = /^[^/]+\/[^/]+$/;
 
 	if (mainRegex.test(entry)) {
 		return formatByMain(entry);
 	}
 
-	const podRegex = /^[^\/]+\/pods\/[^\/]+.\/[^\/]+/;
+	const podRegex = /^[^/]+\/pods\/[^/]+.\/[^/]+/;
 
 	if (podRegex.test(entry)) {
 		return formatByPod(entry);
 	}
 
-	const typeRegex = /^[^\/]+\/[^\/]+\/.*$/;
+	const typeRegex = /^(?:[^/]+\/){2}.*$/;
 
 	if (typeRegex.test(entry)) {
 		return formatByType(entry);
@@ -186,7 +179,7 @@ function parseName(fullName) {
 }
 
 function reopenModule(module) {
-	const regexp = /^([^\/]+)\/reopens\//;
+	const regexp = /^([^/]+)\/reopens\//;
 	const namespaces = this.get('namespace.namespaces') || this.get('namespaces');
 	const moduleName = module._moduleName;
 
@@ -273,6 +266,8 @@ export default Mixin.create({
 	init() {
 		this._super(...arguments);
 
+		// Fallback code
+
 		if (!this.get('pluralizedTypes')) {
 			this.set('pluralizedTypes', {
 				config: 'config'
@@ -285,7 +280,6 @@ export default Mixin.create({
 
 		this._normalizeCache = {};
 		this._typeCache = {};
-		this._moduleCache = {};
 		this._stringCache = {};
 	},
 
@@ -315,6 +309,15 @@ export default Mixin.create({
 	 * @return Object
 	 */
 	resolveTemplate: resolveModule,
+
+	/**
+	 * Lookup for an engine in registry based on name and type.
+	 *
+	 * @method resolveEngine
+	 * @param  {String}     parsedName
+	 * @return Object
+	 */
+	resolveEngine: resolveModule,
 
 	/**
 	 * Lookup for a module in registry based on name and type.
@@ -354,7 +357,7 @@ export default Mixin.create({
 		}
 
 		if (globalTypes.includes(type)) {
-			const regexp = /^[^\/]+\/(engine|routes)$/;
+			const regexp = /^[^/]+\/(engine|routes)$/;
 			let moduleType = type;
 
 			if (type === 'route-map') {
@@ -371,7 +374,7 @@ export default Mixin.create({
 				}
 			});
 		} else {
-			const regexp = /^([^\/]+)\//;
+			const regexp = /^([^/]+)\//;
 
 			Object.keys(requirejs.entries).forEach((entry) => {
 				const matches = regexp.exec(entry);
@@ -469,12 +472,7 @@ export default Mixin.create({
 	 * @return String
 	 */
 	findModule(namespace, type, name) {
-		const str = makeToString(namespace, type, name);
 		const resolvers = A([this.findModuleByMain, this.findModuleByType, this.findModuleByPod]);
-
-		if (this._moduleCache[str]) {
-			return this._moduleCache[str];
-		}
 
 		let foundEntry = null;
 
@@ -488,11 +486,8 @@ export default Mixin.create({
 
 			return existEntry;
 		});
-		const module = moduleEntry && foundEntry;
 
-		this._moduleCache[str] = module;
-
-		return module;
+		return moduleEntry && foundEntry;
 	},
 
 	/**

@@ -29,6 +29,8 @@ This resolver allows to use any amd module namespace defined in the configuratio
 
 * `ember install ember-cli-awesome-resolver`
 
+Contributing
+------------------------------------------------------------------------------
 
 ## Usage
 

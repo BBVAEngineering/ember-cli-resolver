@@ -1,3 +1,4 @@
+/* eslint-disable callback-return */
 const now = window.performance.now.bind(window.performance);
 
 function median(array) {
